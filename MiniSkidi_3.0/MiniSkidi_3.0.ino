@@ -1,5 +1,5 @@
 /*
-
+    Bluepad32 x MiniSkidi_3.0
 */
 #include <Arduino.h>
 
@@ -14,17 +14,6 @@
 #define auxServoPin 22
 #define lightPin1 18
 #define lightPin2 5
-#define UP 1
-#define DOWN 2
-#define LEFT 3
-#define RIGHT 4
-#define ARMUP 5
-#define ARMDOWN 6
-#define STOP 0
-
-#define RIGHT_MOTOR 1
-#define LEFT_MOTOR 0
-#define ARM_MOTOR 2
 
 #define FORWARD 1
 #define BACKWARD -1
@@ -33,15 +22,10 @@
 
 #define MOTOR_PWM_FREQ 5000
 #define MOTOR_PWM_RES 8
-// global constants
-
-// global variables
 
 Servo bucketServo; // Grabs PWM Channel 0
 Servo auxServo; // Grabs PWM Channel 1
 
-bool horizontalScreen;//When screen orientation is locked vertically this rotates the D-Pad controls so that forward would now be left.
-bool removeArmMomentum = false;
 bool light = false;
 int bucket_pos = 140;
 int claw_pos = 150;
@@ -60,7 +44,6 @@ std::vector<MOTOR_PINS> motorPins =
   {33, 32, 4, 5},  //LEFT_MOTOR Pins
   {21, 19, 6, 7},  //ARM_MOTOR Pins
 };
-
 
 void bucketTilt(int bucketServoValue)
 {
@@ -111,23 +94,14 @@ void setUpPinModes()
   pinMode(lightPin2, OUTPUT);
 }
 
-
- /////////////////////////////////
-
-
 ControllerPtr myControllers[BP32_MAX_CONTROLLERS];
 
-// Arduino setup function. Runs in CPU 1
 void setup() {
-  // Initialize serial
   Serial.begin(115200);
   while (!Serial) {
     // wait for serial port to connect.
-    // You don't have to do this in your game. This is only for debugging
-    // purposes, so that you can see the output in the serial console.
-    ;
   }
-  // Setup IO
+
   setUpPinModes();
   String fv = BP32.firmwareVersion();
   Serial.print("Firmware version installed: ");
@@ -144,10 +118,6 @@ void setup() {
       Serial.println();
   }
 
-  // BP32.pinMode(27, OUTPUT);
-  // BP32.digitalWrite(27, 0);
-
-  // This call is mandatory. It setups Bluepad32 and creates the callbacks.
   BP32.setup(&onConnectedController, &onDisconnectedController);
 
   // "forgetBluetoothKeys()" should be called when the user performs
@@ -158,8 +128,6 @@ void setup() {
   BP32.forgetBluetoothKeys();
 }
 
-// This callback gets called any time a new gamepad is connected.
-// Up to 4 gamepads can be connected at the same time.
 void onConnectedController(ControllerPtr ctl) {
   bool foundEmptySlot = false;
   for (int i = 0; i < BP32_MAX_GAMEPADS; i++) {
@@ -288,29 +256,10 @@ void processGamepad(ControllerPtr gamepad) {
     lightControl();
   }
 
-  if (gamepad->b()) {
-    // Turn on the 4 LED. Each bit represents one LED.
-    static int led = 0;
-    led++;
-    // Some gamepads like the DS3, DualSense, Nintendo Wii, Nintendo Switch
-    // support changing the "Player LEDs": those 4 LEDs that usually indicate
-    // the "gamepad seat".
-    // It is possible to change them by calling:
-    gamepad->setPlayerLEDs(led & 0x0f);
-  }
-
   if (gamepad->x()) {
     // Duration: 255 is ~2 seconds
-    // force: intensity
-    // Some gamepads like DS3, DS4, DualSense, Switch, Xbox One S support
-    // rumble.
-    // It is possible to set it by calling:
     gamepad->setRumble(0xc0 /* force */, 0x50 /* duration */);
   }
-
-  // Another way to query the buttons, is by calling buttons(), or
-  // miscButtons() which return a bitmask.
-  // Some gamepads also have DPAD, axis and more.
   char buf[256];
   snprintf(buf, sizeof(buf) - 1,
            "idx=%d, dpad: 0x%02x, buttons: 0x%04x, "
@@ -337,21 +286,11 @@ void processGamepad(ControllerPtr gamepad) {
            gamepad->battery()       // 0=Unknown, 1=empty, 255=full
   );
   Serial.println(buf);
-
-  // You can query the axis and other properties as well. See
-  // Controller.h For all the available functions.
 }
 
-// Arduino loop function. Runs in CPU 1
 void loop() {
-  // This call fetches all the controller info from the NINA (ESP32) module.
-  // Just call this function in your main loop.
-  // The controllers pointer (the ones received in the callbacks) gets updated
-  // automatically.
   BP32.update();
 
-  // It is safe to always do this before using the controller API.
-  // This guarantees that the controller is valid and connected.
   for (int i = 0; i < BP32_MAX_CONTROLLERS; i++) {
     ControllerPtr myController = myControllers[i];
 
