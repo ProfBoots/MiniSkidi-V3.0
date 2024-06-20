@@ -6,3 +6,11 @@
 * "ESPAsyncWebSrv" by "dvarrel" `Version 1.2.7` https://github.com/dvarrel/ESPAsyncWebSrv/releases
 * "AsyncTCP.h" by "dvarrel" `Version which comes with ESPAsyncWebSrv`
 * "ESPAsyncTCP.h" by "dvarrel" `Version which comes with ESPAsyncWebSrv`
+
+
+trying https://github.com/sudar/Arduino-Makefile
+
+```
+brew tap sudar/arduino-mk
+brew install arduino-mk
+```
