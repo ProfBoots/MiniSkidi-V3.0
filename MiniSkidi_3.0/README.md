@@ -19,18 +19,8 @@ Compilation error: exit status 126
 * "AsyncTCP.h" by "dvarrel" `Version which comes with ESPAsyncWebSrv` or  `AsyncTCP@1.1.4` according to the workshop
 * "ESPAsyncTCP.h" by "dvarrel" `Version which comes with ESPAsyncWebSrv` or `ESPAsyncTCP@1.2.4`
 
-```
-Downloading ESPAsyncTCP@1.2.4
-ESPAsyncTCP@1.2.4
-Installing ESPAsyncTCP@1.2.4
-Installed ESPAsyncTCP@1.2.4
-Downloading ESPAsyncWebSrv@1.2.7
-ESPAsyncWebSrv@1.2.7
-Installing ESPAsyncWebSrv@1.2.7
-Installed ESPAsyncWebSrv@1.2.7
-Downloading AsyncTCP@1.1.4
-AsyncTCP@1.1.4
-Installing AsyncTCP@1.1.4
-Installed AsyncTCP@1.1.4
-```
+
+# compilation / board
+
+* Falko and Jan and [his elementary school children](https://35services.de/2024/diy-eine-3d-druck-und-elektronik-ag-an-der-ktg/#AG04) are using the USB-C board from https://de.aliexpress.com/item/1005006585256277.html which has a `wroom-32`ESP onboard. But you need to select `ESP32 Wrover Module`!
 
